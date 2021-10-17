@@ -62,10 +62,18 @@ app.put('/notes/:noteId', async (req, res) => {
     }
 });
 
-//TODO - Delete a Note with noteId
-//http://mongoosejs.com/docs/api.html#findbyidandremove_findByIdAndRemove
-app.delete('/notes/:noteId', (req, res) => {
-    //TODO - Write your code here to delete the note using noteid
+// Delete a Note with noteId
+// http://mongoosejs.com/docs/api.html#findbyidandremove_findByIdAndRemove
+app.delete('/notes/:noteId', async (req, res) => {
+    // Write your code here to delete the note using noteid
+    try {
+        const note = await noteModel.findByIdAndDelete(req.params.noteId)
+
+        if(!note) res.status(404).send("No Note Found.")
+        res.status(200).send("Note Deleted Successfully.")
+    } catch(err) {
+        res.status(500).send(err)
+    }
 });
 
 module.exports = app
